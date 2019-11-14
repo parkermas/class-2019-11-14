@@ -1,0 +1,45 @@
+---
+title: "class_2019_11_14"
+author: "Parker Mas"
+date: "11/14/2019"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(tidyverse)
+library(googlesheets4)
+library(broom)
+```
+
+
+```{r}
+
+sheets_deauth()
+
+national_election <- read_sheet("1QA_Xv9tAbKhwFdQpnVa2hTjhEdg5zAl4WY5EVanWSo0")
+
+```
+
+```{r}
+
+national_election %>%
+  ggplot(aes(x = dem_adv, y = dvote)) +
+  geom_jitter(height = 0.1, width = 0.1, alpha = 0.1) +
+  geom_smooth(method = "lm", se = FALSE)
+
+model <- lm(dvote ~ dem_adv, data = national_election)
+
+model
+
+model_glm <- glm(dvote ~ female, data = national_election, family = "binomial")
+
+model_glm
+
+national_election %>%
+  ggplot(aes(x = female, y = dvote)) +
+  geom_jitter(height = .1, width = .1, alpha = .1) +
+  geom_smooth(method = "glm", method.args = list(family = "binomial"), se = FALSE)
+
+```
+
